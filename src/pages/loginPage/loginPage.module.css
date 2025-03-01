@@ -1,0 +1,53 @@
+.form {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 24px;
+    width: 320px;
+}
+
+.inputs {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+    width: 100%;
+}
+
+.label {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    position: relative;
+}
+
+.input {
+    margin-top: 8px;
+    padding: 8px;
+    border: 1px solid grey;
+    border-radius: 4px;
+    width: 100%;
+}
+
+.button {
+    color: white;
+    background-color: #0072DB;
+    padding: 8px 12px;
+    border-radius: 4px;
+}
+
+.button:disabled {
+    background-color: grey;
+}
+
+.text {
+    margin-top: 16px;
+    color: gray;
+    font-size: 12px;
+}
+
+.error {
+    position: absolute;
+    color: red;
+    font-size: 10px;
+    top: 64px;
+}
