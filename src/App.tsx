@@ -3,11 +3,12 @@ import {
   createBrowserRouter,
   Route,
 } from "react-router-dom";
+import MainPage from "./pages/mainPage/mainPage";
 
 const router = createBrowserRouter(
   createRoutesFromElements(
     <Route>
-      <Route path="/" element={<></>} />
+      <Route path="/" element={<MainPage />} />
     </Route>
   )
 );
