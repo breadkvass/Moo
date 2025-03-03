@@ -14,6 +14,11 @@ export const getInfo = async () => {
       .then((res) => checkResponse(res))
 };
 
+export const getUser = async (token: string) => {
+  return await fetch(`${BASE_URL}/profile?token=${token}`)
+      .then((res) => checkResponse(res))
+}
+
 export const login = async ({email, password}: {email: string, password: string}) => {
   return await fetch(`${BASE_URL}/login`, {
     method: 'POST',
@@ -26,7 +31,7 @@ export const login = async ({email, password}: {email: string, password: string}
     })
   })
     .then(checkResponse)
-    .then((data) => console.log(data))
+    .then((data) => localStorage.setItem('token', data.data.token))
     .catch(err => {
       console.log(err);
     });

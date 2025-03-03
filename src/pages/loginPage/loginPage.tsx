@@ -1,17 +1,19 @@
-import { ChangeEvent, FormEvent, useEffect, useState } from 'react';
+import { ChangeEvent, FormEvent, useContext, useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { getUser, login } from '../../utils/api';
+import { AuthContext } from '../../context/authContext';
 import Layout from '../../components/layout/layout';
 import styles from './loginPage.module.css';
-import { login } from '../../utils/api';
 
 const LoginPage = () => {
+    const navigate = useNavigate();
+    const [ user, { setUser, setIsAuth }] = useContext(AuthContext);
     const [ email, setEmail ] = useState<string>('');
     const [ password, setPassword ] = useState<string>('');
-
     const [inputsErrors, setinputsErrors] = useState({
         email: '',
         password: '',
     });
-
     const [ isValid, setIsValid ] = useState(true);
 
 
@@ -35,10 +37,23 @@ const LoginPage = () => {
         }
     }
 
-    const onSubmitHandler = async (e: FormEvent) => {
+    const getUserData = () => {
+        const token =  localStorage.getItem('token');
+        if (token) {
+            getUser(token)
+                .then((data) => setUser(data.data))
+                .then(() => setIsAuth(true))
+        }
+    }
+
+    const onSubmitHandler = (e: FormEvent) => {
         e.stopPropagation();
         e.preventDefault();
-        await login({email, password});
+
+        login({email, password})
+            .then(() => getUserData())
+            .then(() => setUser(user.user))
+            .then(() => navigate('/profile'))
     }
 
     useEffect(() => {
@@ -48,7 +63,6 @@ const LoginPage = () => {
             setIsValid(true);
         }
     }, [password, email]);
-
 
     return (
         <Layout>
@@ -78,7 +92,7 @@ const LoginPage = () => {
                         {inputsErrors.password && <p className={styles.error}>{inputsErrors.password}</p>}
                     </label>
                 </div>
-                <button className={styles.button} type='submit' disabled={!isValid ? true : false} >Submit</button>
+                <button className={styles.button} type='submit' disabled={!isValid ? true : false}>Submit</button>
             </form>
         </Layout>
     );

@@ -7,14 +7,12 @@ const middlewares = jsonServer.defaults();
 
 server.use(cors());
 server.use(middlewares);
-server.use(jsonServer.bodyParser); // Позволяет работать с `req.body`
+server.use(jsonServer.bodyParser);
 
-// Моковые данные пользователей (как в `db.json`)
 const users = [
-  { id: 1, email: "aleksei@example.com", password: "lkJlkn8hj", fullname: "Aleksei K", token: "mock-token-123" }
+  { id: 1, email: "aleksei@example.com", password: "lkJlkn8hj", fullname: "Aleksei K", token: "fb566635a66295da0c8ad3f467c32dcf" }
 ];
 
-// Обрабатываем вход в систему
 server.post("/login", (req, res) => {
   const { email, password } = req.body;
   const user = users.find(u => u.email === email && u.password === password);
@@ -26,7 +24,17 @@ server.post("/login", (req, res) => {
   }
 });
 
-// Подключаем стандартный роутер JSON Server
+server.get("/profile", (req, res) => {
+  const token = req.query.token;
+  const user = users.find(u => u.token === token);
+
+  if (user) {
+    res.json({ success: true, data: { fullname: user.fullname, email: user.email } });
+  } else {
+    res.status(401).json({ success: false, data: { message: "Access denied." } });
+  }
+});
+
 server.use(router);
 
 const PORT = process.env.PORT || 5000;
