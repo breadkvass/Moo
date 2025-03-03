@@ -1,16 +1,17 @@
 import { ChangeEvent, FormEvent, useContext, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { getUser, login } from '../../utils/api';
-import { AuthContext } from '../../context/authContext';
+import { AuthContext } from '../../utils/authContext';
 import Layout from '../../components/layout/layout';
 import styles from './loginPage.module.css';
+import SpinnerIcon from '../../components/spinnerIcon/spinnerIcon';
 
 const LoginPage = () => {
     const navigate = useNavigate();
-    const [ user, { setUser, setIsAuth }] = useContext(AuthContext);
+    const [ user, { setUser, setIsAuth, setIsError, setIsLoading }] = useContext(AuthContext);
     const [ email, setEmail ] = useState<string>('');
     const [ password, setPassword ] = useState<string>('');
-    const [inputsErrors, setinputsErrors] = useState({
+    const [ inputsErrors, setinputsErrors ] = useState({
         email: '',
         password: '',
     });
@@ -43,17 +44,23 @@ const LoginPage = () => {
             getUser(token)
                 .then((data) => setUser(data.data))
                 .then(() => setIsAuth(true))
+                .catch(() => setIsError(true))
         }
     }
 
     const onSubmitHandler = (e: FormEvent) => {
         e.stopPropagation();
         e.preventDefault();
-
+        setIsLoading(true);
         login({email, password})
             .then(() => getUserData())
             .then(() => setUser(user.user))
             .then(() => navigate('/profile'))
+            .catch(() => setIsError(true))
+            .finally(() => {
+                setIsLoading(true);
+                setPassword('');
+            });
     }
 
     useEffect(() => {
@@ -92,6 +99,8 @@ const LoginPage = () => {
                         {inputsErrors.password && <p className={styles.error}>{inputsErrors.password}</p>}
                     </label>
                 </div>
+                {user.isError && <p className={styles.invalid}>Invalid email or password</p>}
+                {user.isLoading && <SpinnerIcon spinnerStyle={styles.spinner} />}
                 <button className={styles.button} type='submit' disabled={!isValid ? true : false}>Submit</button>
             </form>
         </Layout>
