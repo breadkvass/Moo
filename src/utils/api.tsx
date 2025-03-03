@@ -1,13 +1,33 @@
+const BASE_URL = 'http://localhost:5000'
+
 const checkResponse = (res: Response) => {
-    if (res.ok) {
-      return res.json();
-    }
-    return res.json().then((err: Error) => {
-      return Promise.reject(err);
-    });
+  if (res.ok) {
+    return res.json();
+  }
+  return res.json().then((err: Error) => {
+    return Promise.reject(err);
+  });
 };
 
 export const getInfo = async () => {
-    return await fetch("http://localhost:5000/info")
-        .then((res) => checkResponse(res))
+  return await fetch(`${BASE_URL}/info`)
+      .then((res) => checkResponse(res))
 };
+
+export const login = async ({email, password}: {email: string, password: string}) => {
+  return await fetch(`${BASE_URL}/login`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({
+        email: email, 
+        password: password
+    })
+  })
+    .then(checkResponse)
+    .then((data) => console.log(data))
+    .catch(err => {
+      console.log(err);
+    });
+}

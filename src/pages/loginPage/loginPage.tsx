@@ -1,10 +1,11 @@
 import { ChangeEvent, FormEvent, useEffect, useState } from 'react';
 import Layout from '../../components/layout/layout';
 import styles from './loginPage.module.css';
+import { login } from '../../utils/api';
 
 const LoginPage = () => {
-    const [ emailValue, setEmailValue ] = useState<string>('');
-    const [ passwordValue, setPasswordValue ] = useState<string>('');
+    const [ email, setEmail ] = useState<string>('');
+    const [ password, setPassword ] = useState<string>('');
 
     const [inputsErrors, setinputsErrors] = useState({
         email: '',
@@ -15,7 +16,7 @@ const LoginPage = () => {
 
 
     const emailHandler = (e: ChangeEvent<HTMLInputElement>) => {
-        setEmailValue(e.target.value);
+        setEmail(e.target.value);
         const validEmail = /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/;
         if (!validEmail.test(String(e.target.value))) {
             setinputsErrors({ ...inputsErrors, email: 'Incorrect email' })
@@ -25,7 +26,7 @@ const LoginPage = () => {
     }
 
     const passwordHandler = (e: ChangeEvent<HTMLInputElement>) => {
-        setPasswordValue(e.target.value);
+        setPassword(e.target.value);
         const validPasswordLength = 8;
         if (e.target.value.length < validPasswordLength) {
             setinputsErrors({ ...inputsErrors, password: 'The password must be 8 characters or more' })
@@ -37,18 +38,16 @@ const LoginPage = () => {
     const onSubmitHandler = async (e: FormEvent) => {
         e.stopPropagation();
         e.preventDefault();
-        console.log(emailValue, passwordValue);
-        // await loginUser(emailValue, passwordValue);
-        // navigate('/profile');
+        await login({email, password});
     }
 
     useEffect(() => {
-        if (!emailValue || !passwordValue || inputsErrors.email || inputsErrors.password) {
+        if (!email || !password || inputsErrors.email || inputsErrors.password) {
             setIsValid(false);
         } else {
             setIsValid(true);
         }
-    }, [passwordValue, emailValue]);
+    }, [password, email]);
 
 
     return (
@@ -61,7 +60,7 @@ const LoginPage = () => {
                             type='email'
                             placeholder='Enter email'
                             onChange={(e) => emailHandler(e)}
-                            value={emailValue}
+                            value={email}
                             name={'login'}
                         />
                         {inputsErrors.email && <p className={styles.error}>{inputsErrors.email}</p>}
@@ -73,7 +72,7 @@ const LoginPage = () => {
                             type='password'
                             placeholder='Password'
                             onChange={(e) => passwordHandler(e)}
-                            value={passwordValue}
+                            value={password}
                             name={'password'}
                         />
                         {inputsErrors.password && <p className={styles.error}>{inputsErrors.password}</p>}
