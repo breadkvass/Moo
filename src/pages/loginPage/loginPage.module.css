@@ -4,6 +4,8 @@
     align-items: flex-start;
     gap: 24px;
     width: 320px;
+    height: max-content;
+    position: relative;
 }
 
 .inputs {
@@ -50,4 +52,18 @@
     color: red;
     font-size: 10px;
     top: 64px;
+}
+
+.invalid {
+    position: absolute;
+    color: red;
+    font-size: 14px;
+    bottom: 8px;
+    left: 88px;
+}
+
+.spinner {
+    position: absolute;
+    bottom: 1px;
+    left: 88px;
 }
