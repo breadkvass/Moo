@@ -1,10 +1,10 @@
 import * as React from "react";
 import * as ReactDOM from "react-dom/client";
 import { RouterProvider } from "react-router-dom";
-import { CompanyInfoContextProvider } from "./store/companyContext";
+import { CompanyInfoContextProvider } from "./utils/companyContext";
 import router from "./App";
 import "./index.css";
-import { AuthContextProvider } from "./context/authContext";
+import { AuthContextProvider } from "./utils/authContext";
 
 ReactDOM.createRoot(document.getElementById("root")!).render(
   <React.StrictMode>
