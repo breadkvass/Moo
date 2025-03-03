@@ -27,7 +27,7 @@ type AuthContextType = [
 const AuthContext = createContext<AuthContextType>([
   {
     user: {} as User,
-    isLoading: true,
+    isLoading: false,
     isError: false,
     isAuth: false
   },
@@ -46,7 +46,7 @@ type AuthContextProviderProps = {
 const AuthContextProvider: FC<AuthContextProviderProps> = ({ children }) => {
     const [state, setState] = useState<AuthProps>({
         user: {} as User,
-        isLoading: true,
+        isLoading: false,
         isError: false,
         isAuth: false
     });
