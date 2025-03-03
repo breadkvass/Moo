@@ -5,15 +5,6 @@
         "info": "Some information about the <b>company</b>."
       }
     },
-    "users": [
-      {
-        "id": 1,
-        "email": "aleksei@example.com",
-        "password": "lkJlkn8hj",
-        "fullname": "Aleksei K",
-        "token": "fb566635a66295da0c8ad3f467c32dcf"
-      }
-    ],
     "authors": [
       { "authorId": 1, "name": "Walt Disney" },
       { "authorId": 2, "name": "Mark Twain" },
