@@ -11,12 +11,18 @@ const checkResponse = (res: Response) => {
 
 export const getInfo = async () => {
   return await fetch(`${BASE_URL}/info`)
-      .then((res) => checkResponse(res))
+    .then((res) => checkResponse(res))
+    .catch(err => {
+      console.log(err);
+    });
 };
 
 export const getUser = async (token: string) => {
   return await fetch(`${BASE_URL}/profile?token=${token}`)
-      .then((res) => checkResponse(res))
+    .then((res) => checkResponse(res))
+    .catch(err => {
+      console.log(err);
+    });
 }
 
 export const login = async ({email, password}: {email: string, password: string}) => {
