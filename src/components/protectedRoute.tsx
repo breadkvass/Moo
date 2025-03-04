@@ -8,7 +8,7 @@ type Protected = {
 }
 
 export const ProtectedOnlyAuth = ({component}: Protected) => {
-  const [ user, { setIsAuth, setUser }] = useContext(AuthContext);
+  const [ user, { setIsAuth, setUser, setIsLoading }] = useContext(AuthContext);
   const location = useLocation();
   const token = localStorage.getItem('token');
 
@@ -17,8 +17,9 @@ export const ProtectedOnlyAuth = ({component}: Protected) => {
   } else if (user.isAuth === false && token) {
     if (token != null) {
       getUser(token)
-          .then((data) => setUser(data.data))
-          .then(() => setIsAuth(true))
+        .then((data) => setUser(data.data))
+        .then(() => setIsAuth(true))
+        .finally(() => setIsLoading(false))
       return component;
     } else {
       return <Navigate to="/login" state={{from: location} } />
@@ -29,7 +30,7 @@ export const ProtectedOnlyAuth = ({component}: Protected) => {
 }
 
 export const ProtectedOnlyUnAuth = ({component}: Protected) => {
-  const [ user, { setIsAuth, setUser }] = useContext(AuthContext);
+  const [ user, { setIsAuth, setUser, setIsLoading }] = useContext(AuthContext);
   const location = useLocation();
   const token = localStorage.getItem('token');
 
@@ -39,7 +40,8 @@ export const ProtectedOnlyUnAuth = ({component}: Protected) => {
       if (token != null) {
         getUser(token)
           .then((data) => setUser(data.data))
-          .then(() => setIsAuth(true));
+          .then(() => setIsAuth(true))
+          .finally(() => setIsLoading(false))
         return <Navigate to="/profile" state={{from: location} } />
       } else {
       return component;
@@ -50,14 +52,15 @@ export const ProtectedOnlyUnAuth = ({component}: Protected) => {
 }
 
 export const Protected = ({component}: Protected) => {
-  const [ user, { setIsAuth, setUser }] = useContext(AuthContext);
+  const [ user, { setIsAuth, setUser, setIsLoading }] = useContext(AuthContext);
   const token = localStorage.getItem('token');
 
   if (user.isAuth === false && token) {
     if (token != null) {
       getUser(token)
         .then((data) => setUser(data.data))
-        .then(() => setIsAuth(true));
+        .then(() => setIsAuth(true))
+        .finally(() => setIsLoading(false))
       return component;
     }
   } else {
