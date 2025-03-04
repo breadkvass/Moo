@@ -36,3 +36,12 @@ export const login = async ({email, password}: {email: string, password: string}
     .then(checkResponse)
     .then((data) => localStorage.setItem('token', data.data.token))
 }
+
+export const logout = async (token: string) => {
+  return await fetch(`${BASE_URL}/logout?token=${token}`, {
+    method: 'DELETE'
+  })
+  .then(checkResponse)
+  .then(() => localStorage.clear())
+  .catch((error) => console.error("Error during logout:", error.message));
+}

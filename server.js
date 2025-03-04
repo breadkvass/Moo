@@ -35,6 +35,17 @@ server.get("/profile", (req, res) => {
   }
 });
 
+server.delete("/logout", (req, res) => {
+  const token = req.query.token;
+  const user = users.find(u => u.token === token);
+
+  if (user) {
+    res.json({ success: true, data: {} });
+  } else {
+    res.status(401).json({ success: false, data: { message: "Invalid token or already logged out." } });
+  }
+});
+
 server.use(router);
 
 const PORT = process.env.PORT || 5000;
