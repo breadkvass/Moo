@@ -3,8 +3,8 @@ import { useNavigate } from 'react-router-dom';
 import { getUser, login } from '../../utils/api';
 import { AuthContext } from '../../utils/authContext';
 import Layout from '../../components/layout/layout';
-import styles from './loginPage.module.css';
 import SpinnerIcon from '../../components/spinnerIcon/spinnerIcon';
+import styles from './loginPage.module.css';
 
 const LoginPage = () => {
     const navigate = useNavigate();
