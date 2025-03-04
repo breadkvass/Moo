@@ -1,4 +1,4 @@
-import { FC, useContext } from 'react';
+import { FC, useContext, useState } from 'react';
 import styles from './layout.module.css';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { AuthContext } from '../../utils/authContext';
@@ -12,8 +12,9 @@ type LayoutProps = {
 const Layout: FC<LayoutProps> = ({children}) => {
     const navigate = useNavigate();
     const pathname = useLocation().pathname;
-    const [ user, { setUser, setIsAuth, setIsLoading, setIsError } ] = useContext(AuthContext);
+    const [ user, { setUser, setIsAuth, setIsError } ] = useContext(AuthContext);
     const token = localStorage.getItem('token');
+    const [ isLoadingLogout, setIsLoadingLogout ] = useState(false);
 
     const route = (path: string) => {
         if (pathname !== path) {
@@ -28,8 +29,8 @@ const Layout: FC<LayoutProps> = ({children}) => {
     }
 
     const logoutHandler = () => {
-        setIsLoading(true);
         if (token) {
+            setIsLoadingLogout(true);
             logout(token)
                 .then(() => {
                     setIsAuth(false);
@@ -38,10 +39,10 @@ const Layout: FC<LayoutProps> = ({children}) => {
                         fullname: ''
                     });
                 })
+                .then(() => setIsLoadingLogout(false))
         } else {
             setIsError(true);
         }
-        setIsLoading(false)
     }
 
     return (
@@ -54,7 +55,7 @@ const Layout: FC<LayoutProps> = ({children}) => {
                 {user.isAuth && <button className={styles.button} onClick={() => logoutHandler()} disabled={!user.isAuth}>
                     {user.isError ? 'Error' : 'Sign out'}
                 </button>}
-                {user.isLoading && <SpinnerIcon spinnerStyle={styles.spinner}/>}
+                {isLoadingLogout && <SpinnerIcon spinnerStyle={styles.spinner}/>}
             </div>
             {children}
         </div>
