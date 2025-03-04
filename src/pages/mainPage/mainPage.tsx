@@ -15,7 +15,6 @@ const MainPage = () => {
     const [companyInfo, {setInfo, setIsLoading, setIsError}] = useContext(CompanyInfoContext);
 
     useEffect(() => {
-        setIsLoading(true);
         getInfo()
             .then(res => setInfo(res.data.info))
             .catch(() => setIsError(true))
@@ -31,7 +30,7 @@ const MainPage = () => {
         <Layout>
             {(
                 companyInfo.isLoading ?
-                    <SpinnerIcon /> : (
+                    <SpinnerIcon spinnerStyle=''/> : (
                     companyInfo.isError ?
                         <p className={styles.error}>Ошибка загрузки</p> : (
                             companyInfo && <RawHTML dirtyHTML={companyInfo.info}/> 
