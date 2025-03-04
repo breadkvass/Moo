@@ -2,7 +2,7 @@ import { createContext, FC, ReactElement, useState } from "react";
 
 type User = {
   email: string;
-  name: string;
+  fullname: string;
 }
 
 type AuthProps = {
