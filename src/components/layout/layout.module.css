@@ -3,12 +3,14 @@
     flex-direction: column;
     margin: 20px 0 0 20px;
     gap: 36px;
+    width: 100%;
 }
 
 .buttons {
     display: flex;
     flex-direction: row;
     gap: 16px;
+    position: relative;
 }
 
 .button {
@@ -16,4 +18,10 @@
   border-radius: 4px;
   padding: 16px;
   font-size: 20px;
+}
+
+.spinner {
+    position: absolute;
+    top: 15px;
+    right: -48px;
 }
