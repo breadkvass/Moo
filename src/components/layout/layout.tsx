@@ -21,6 +21,12 @@ const Layout: FC<LayoutProps> = ({children}) => {
         } else return
     }
 
+    const signInHandler = () => {
+        if (user.isAuth) {
+            route('/profile')
+        } else route('/login')
+    }
+
     const logoutHandler = () => {
         setIsLoading(true);
         if (token) {
@@ -29,7 +35,7 @@ const Layout: FC<LayoutProps> = ({children}) => {
                     setIsAuth(false);
                     setUser({
                         email: '',
-                        name: ''
+                        fullname: ''
                     });
                 })
         } else {
@@ -42,7 +48,9 @@ const Layout: FC<LayoutProps> = ({children}) => {
         <div className={styles.layout}>
             <div className={styles.buttons}>
                 <button className={styles.button} onClick={() => route('/')}>About us</button>
-                <button className={styles.button} onClick={() => route('/login')}>Sign in</button>
+                <button className={styles.button} onClick={signInHandler}>
+                    {user.isAuth ? 'Profile' : 'Sign in'}
+                </button>
                 {user.isAuth && <button className={styles.button} onClick={() => logoutHandler()} disabled={!user.isAuth}>
                     {user.isError ? 'Error' : 'Sign out'}
                 </button>}
