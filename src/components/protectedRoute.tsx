@@ -8,7 +8,7 @@ type Protected = {
 }
 
 export const ProtectedOnlyAuth = ({component}: Protected) => {
-  const [ user, { setIsAuth }] = useContext(AuthContext);
+  const [ user, { setIsAuth, setUser }] = useContext(AuthContext);
   const location = useLocation();
   const token = localStorage.getItem('token');
 
@@ -16,7 +16,9 @@ export const ProtectedOnlyAuth = ({component}: Protected) => {
     return component;
   } else if (user.isAuth === false && token) {
     if (token != null) {
-      getUser(token).then(() => setIsAuth(true))
+      getUser(token)
+          .then((data) => setUser(data.data))
+          .then(() => setIsAuth(true))
       return component;
     } else {
       return <Navigate to="/login" state={{from: location} } />
@@ -27,7 +29,7 @@ export const ProtectedOnlyAuth = ({component}: Protected) => {
 }
 
 export const ProtectedOnlyUnAuth = ({component}: Protected) => {
-  const [ user, { setIsAuth }] = useContext(AuthContext);
+  const [ user, { setIsAuth, setUser }] = useContext(AuthContext);
   const location = useLocation();
   const token = localStorage.getItem('token');
 
@@ -35,7 +37,9 @@ export const ProtectedOnlyUnAuth = ({component}: Protected) => {
     return <Navigate to="/profile" state={{from: location} } />
   } else if (user.isAuth === false && token) {
       if (token != null) {
-        getUser(token).then(() => setIsAuth(true));
+        getUser(token)
+          .then((data) => setUser(data.data))
+          .then(() => setIsAuth(true));
         return <Navigate to="/profile" state={{from: location} } />
       } else {
       return component;
@@ -46,12 +50,14 @@ export const ProtectedOnlyUnAuth = ({component}: Protected) => {
 }
 
 export const Protected = ({component}: Protected) => {
-  const [ user, { setIsAuth }] = useContext(AuthContext);
+  const [ user, { setIsAuth, setUser }] = useContext(AuthContext);
   const token = localStorage.getItem('token');
 
   if (user.isAuth === false && token) {
     if (token != null) {
-      getUser(token).then(() => setIsAuth(true));
+      getUser(token)
+        .then((data) => setUser(data.data))
+        .then(() => setIsAuth(true));
       return component;
     }
   } else {
