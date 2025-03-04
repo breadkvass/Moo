@@ -1,0 +1,35 @@
+.page {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.profile {
+    display: flex;
+    flex-direction: row;
+    gap: 32px;
+}
+
+.avatar {
+    width: 80px;
+    aspect-ratio: 1 / 1;
+    border-radius: 100;
+}
+
+.info {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.name {
+    font-size: 32px;
+}
+
+.update {
+    color: white;
+    background-color: #0072DB;
+    padding: 8px 12px;
+    border-radius: 4px;
+    width: max-content;
+}
