@@ -58,7 +58,7 @@ const LoginPage = () => {
             .then(() => navigate('/profile'))
             .catch(() => setIsError(true))
             .finally(() => {
-                setIsLoading(true);
+                setIsLoading(false);
                 setPassword('');
             });
     }
