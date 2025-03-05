@@ -7,14 +7,17 @@ import styles from './profilePage.module.css';
 
 const ProfilePage = () => {
     const [ user ] = useContext(AuthContext);
-    const [isLoading, setIsLoading] = useState(false);
-
-    const userName = user.user.fullname.split(' ')[0];
+    const [ isLoading, setIsLoading ] = useState(false);
+    const [ userName, setUserName ] = useState('');
 
     useEffect(() => {
         setIsLoading(true);
         if (user.user.fullname) setIsLoading(false)
-    }, [user])
+        if (user.user.fullname) {
+            const userName = user.user.fullname.split(' ')[0];
+            setIsLoading(false)
+            setUserName(userName)
+        }
 
     return (
         <Layout>
