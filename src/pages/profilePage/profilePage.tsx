@@ -12,9 +12,10 @@ import styles from './profilePage.module.css';
 const ProfilePage = () => {
     const [ user ] = useContext(AuthContext);
     const [ openModal, closeModal ] = useContext(ModalContext);
-    const [ author, {setId, setName, setIsLoading, setIsLoadingQuote, setIsError} ] = useContext(AuthorContext);
+    const [ author, { setId, setName, setIsLoading, setIsLoadingQuote, setIsError } ] = useContext(AuthorContext);
     const [ isLoadingProfile, setIsLoadingProfile ] = useState(false);
     const [ userName, setUserName ] = useState('');
+    const [ qoute, setQuote ] = useState('');
     const token = localStorage.getItem('token');
 
     useEffect(() => {
@@ -25,6 +26,12 @@ const ProfilePage = () => {
             setUserName(userName)
         }
     }, [user])
+
+    useEffect(() => {
+        if (author.name && author.quote) {
+            setQuote(`${author.name}: ${author.quote}`)
+        }
+    }, [author.name, author.quote])
 
     const stopRequestHandler = () => {
         closeModal();
@@ -72,7 +79,7 @@ const ProfilePage = () => {
                             </button>
                         </div>
                     </div>
-                    <p className={styles.quote}></p>
+                    <p className={styles.quote}>{qoute}</p>
                 </div>
             }
         </Layout>
