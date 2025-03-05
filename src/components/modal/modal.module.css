@@ -1,0 +1,31 @@
+.modal {
+    background-color: white;
+    margin: 0 auto;
+    border-radius: 4px;
+    position: absolute;
+    padding: 30px;
+    width: 500px;
+    position: relative;
+}
+
+.title {
+    font-weight: 600;
+    font-size: 32px;
+    margin: 0 0 12px 0;
+}
+
+.request {
+    display: flex;
+    flex-direction: row;
+    gap: 4px;
+    margin-top: 4px
+}
+
+.cancel {
+    color: white;
+    background-color: #0072DB;
+    padding: 8px 12px;
+    border-radius: 4px;
+    width: max-content;
+    margin-top: 20px;
+}
