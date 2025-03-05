@@ -45,3 +45,15 @@ export const logout = async (token: string) => {
   .then(() => localStorage.clear())
   .catch((error) => console.error("Error during logout:", error.message));
 }
+
+export const getAuthor = async (token: string) => {
+  return await fetch(`${BASE_URL}/author?token=${token}`)
+    .then((res) => checkResponse(res))
+    .catch(err => console.log(err));
+};
+
+export const getQuote = async (token: string, authorId: number) => {
+  return await fetch(`${BASE_URL}/quote?token=${token}&authorId=${authorId}`)
+    .then((res) => checkResponse(res))
+    .catch(err => console.log(err));
+};
