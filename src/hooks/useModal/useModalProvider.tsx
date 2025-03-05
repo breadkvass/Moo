@@ -1,5 +1,5 @@
 import { createContext, FC, ReactElement } from "react";
-import useModal, { UseModalType } from "./useModal";
+import { useModal, UseModalType } from "./useModal";
 import Modal from "./modal";
 
 const ModalContext = createContext<UseModalType>([()=>{},()=>{}, null]);

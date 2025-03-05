@@ -6,12 +6,11 @@ export type UseModalType = [
     content: ReactElement | null,
 ]
 
-const useModal = () => {
+export const useModal = () => {
   const [content, setContent] = useState<ReactElement | null>(null);
 
   const openModal = (content: ReactElement) => {
     setContent(content);
-    console.log('open modal context')
   };
 
   const closeModal = () => {
@@ -20,5 +19,3 @@ const useModal = () => {
 
   return [openModal, closeModal, content] as UseModalType;
 };
-
-export default useModal;
