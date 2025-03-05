@@ -2,7 +2,7 @@ import { FC } from 'react';
 import styles from './spinner.module.css';
 
 type SpinnerIconProps = {
-    spinnerStyle: string;
+    spinnerStyle?: string;
 }
 const SpinnerIcon: FC<SpinnerIconProps> = ({spinnerStyle}) => {
     return (
