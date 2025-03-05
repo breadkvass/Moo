@@ -1,4 +1,3 @@
-
 import { useEffect, useCallback, SyntheticEvent, FC, useContext, useState } from 'react';
 import { AuthorContext } from '../../utils/authorContext';
 import { getQuote } from '../../utils/api';
@@ -13,7 +12,7 @@ type ModalProps = {
 const stopPropagation = (e: SyntheticEvent<Element, Event>) => e.stopPropagation();
 
 const Modal: FC<ModalProps> = ({cancelHandler}) => {
-    const [ author, {setQuote, setIsLoadingQuote} ] = useContext(AuthorContext);
+    const [ author, { setQuote, setIsLoadingQuote } ] = useContext(AuthorContext);
     const [ , closeModal ] = useContext(ModalContext);
     const [ isError, setIsError ] = useState(false);
     const token = localStorage.getItem('token');
