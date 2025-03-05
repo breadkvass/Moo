@@ -1,5 +1,4 @@
-
-import { useEffect, useCallback, SyntheticEvent, FC, useContext, useState } from 'react';
+import { useEffect, useCallback, SyntheticEvent, FC, useContext } from 'react';
 import { AuthorContext } from '../../utils/authorContext';
 import { getQuote } from '../../utils/api';
 import { ModalContext } from '../../hooks/useModal/useModalProvider';
@@ -8,14 +7,14 @@ import styles from "./modal.module.css";
 
 type ModalProps = {
     cancelHandler: () => void;
+    signal: AbortSignal;
 }
 
 const stopPropagation = (e: SyntheticEvent<Element, Event>) => e.stopPropagation();
 
-const Modal: FC<ModalProps> = ({cancelHandler}) => {
-    const [ author, {setQuote, setIsLoadingQuote} ] = useContext(AuthorContext);
+const Modal: FC<ModalProps> = ({cancelHandler, signal}) => {
+    const [ author, { setQuote, setIsLoadingQuote, setIsError } ] = useContext(AuthorContext);
     const [ , closeModal ] = useContext(ModalContext);
-    const [ isError, setIsError ] = useState(false);
     const token = localStorage.getItem('token');
 
     const escHandler = useCallback((e: KeyboardEvent) => {
@@ -28,10 +27,16 @@ const Modal: FC<ModalProps> = ({cancelHandler}) => {
     const fetchQuote = (token: string, authorId: number) => {
         setIsLoadingQuote(true)
         setTimeout(() => {
-            getQuote(token, authorId)
+            getQuote(token, authorId, signal)
                 .then((data) => setQuote(data.data.quote))
-                .catch(() => setIsError(true))
-                .finally(() => setIsLoadingQuote(false))
+                .catch(() => {
+                    setIsError(true);
+                    closeModal();
+                    setIsLoadingQuote(false);
+                })
+                .finally(() => {
+                    setIsLoadingQuote(false)
+                })
         }, 5000)
     }
 
@@ -67,11 +72,10 @@ const Modal: FC<ModalProps> = ({cancelHandler}) => {
                 <div className={styles.request}>
                     <p className={styles.text}>Step 2: Requesting quote..</p>
                     <p className={styles.text}>
-                        {isError && 'Error'}
-                        {!author.isLoadingQuote && !isError && 'Completed'}
+                        {!author.isLoadingQuote && 'Completed'}
                     </p>
                 </div>
-                <button className={styles.cancel} onClick={cancelHandler}>Cancel</button>
+                <button className={styles.cancel} onClick={() => cancelHandler()}>Cancel</button>
             </div>
         </Overlay>
     );

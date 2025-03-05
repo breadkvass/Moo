@@ -1,4 +1,4 @@
-import { useContext, useEffect, useState } from 'react';
+import { useContext, useEffect, useMemo, useState } from 'react';
 import { AuthContext } from '../../utils/authContext';
 import { ModalContext } from '../../hooks/useModal/useModalProvider';
 import { AuthorContext } from '../../utils/authorContext';
@@ -12,10 +12,14 @@ import styles from './profilePage.module.css';
 const ProfilePage = () => {
     const [ user ] = useContext(AuthContext);
     const [ openModal, closeModal ] = useContext(ModalContext);
-    const [ author, {setId, setName, setIsLoading, setIsLoadingQuote, setIsError} ] = useContext(AuthorContext);
+    const [ author, { setId, setName, setIsLoading, setIsLoadingQuote, setIsError } ] = useContext(AuthorContext);
     const [ isLoadingProfile, setIsLoadingProfile ] = useState(false);
     const [ userName, setUserName ] = useState('');
+    const [ qoute, setQuote ] = useState('');
     const token = localStorage.getItem('token');
+
+    const controller = useMemo(() => new AbortController(), [author]);
+    const signal = controller.signal;
 
     useEffect(() => {
         setIsLoadingProfile(true);
@@ -26,13 +30,23 @@ const ProfilePage = () => {
         }
     }, [user])
 
+    useEffect(() => {
+        if (author.name && author.quote) {
+            setQuote(`${author.name} : ${author.quote}`)
+        }
+    }, [author.quote])
+
     const stopRequestHandler = () => {
+        controller.abort();
         closeModal();
+        setIsLoading(false);
+        setIsLoadingQuote(false);
     }
 
     const onUpdateHadler = async () => {
-        setIsLoadingQuote(true)
-        openModal(<Modal cancelHandler={stopRequestHandler} />);
+        setIsError(false);
+        setIsLoadingQuote(true);
+        openModal(<Modal cancelHandler={stopRequestHandler} signal={signal} />);
         if (token) {
             fetchAuthor(token)
         }
@@ -47,14 +61,14 @@ const ProfilePage = () => {
         setIsLoading(true);
         setIsLoadingQuote(true);
         setTimeout(() => {
-            getAuthor(token)
+            getAuthor(token, signal)
                 .then((data) => {
                     setId(data.data.authorId);
                     setName(data.data.name);
                 })
                 .catch(() => setIsError(true))
                 .finally(() => {
-                    setIsLoading(false);
+                    setIsLoading(false)
                 })
         }, 5000)
     }
@@ -68,11 +82,11 @@ const ProfilePage = () => {
                         <div className={styles.info}>
                             <p className={styles.name}>Welcome, {userName}!</p>
                             <button className={styles.update} onClick={() => onUpdateHadler()}>
-                                {author.isError ? 'Error' : 'Update'}
+                                {author.isError ? 'Error, try again' : 'Update'}
                             </button>
                         </div>
                     </div>
-                    <p className={styles.quote}></p>
+                    <p className={styles.quote}>{qoute}</p>
                 </div>
             }
         </Layout>

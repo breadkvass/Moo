@@ -46,14 +46,14 @@ export const logout = async (token: string) => {
   .catch((error) => console.error("Error during logout:", error.message));
 }
 
-export const getAuthor = async (token: string) => {
-  return await fetch(`${BASE_URL}/author?token=${token}`)
+export const getAuthor = async (token: string, signal: AbortSignal) => {
+  return await fetch(`${BASE_URL}/author?token=${token}`, {signal})
     .then((res) => checkResponse(res))
     .catch(err => console.log(err));
 };
 
-export const getQuote = async (token: string, authorId: number) => {
-  return await fetch(`${BASE_URL}/quote?token=${token}&authorId=${authorId}`)
+export const getQuote = async (token: string, authorId: number, signal: AbortSignal) => {
+  return await fetch(`${BASE_URL}/quote?token=${token}&authorId=${authorId}`, {signal})
     .then((res) => checkResponse(res))
     .catch(err => console.log(err));
 };
