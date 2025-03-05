@@ -2,7 +2,7 @@ import styles from './overlay.module.css';
 import { FC, ReactElement, SyntheticEvent } from "react";
 
 type OverlayProps = {
-    closeHandler: Function;
+    closeHandler: () => void;
     children: ReactElement;
 }
 
