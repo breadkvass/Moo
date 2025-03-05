@@ -9,9 +9,10 @@ server.use(cors());
 server.use(middlewares);
 server.use(jsonServer.bodyParser);
 
-const users = [
-  { id: 1, email: "aleksei@example.com", password: "lkJlkn8hj", fullname: "Aleksei K", token: "fb566635a66295da0c8ad3f467c32dcf" }
-];
+const db = router.db;
+const users = db.get("users").value();
+const authors = db.get("authors").value();
+const quotes = db.get("quotes").value();
 
 server.post("/login", (req, res) => {
   const { email, password } = req.body;
@@ -33,6 +34,42 @@ server.get("/profile", (req, res) => {
   } else {
     res.status(401).json({ success: false, data: { message: "Access denied." } });
   }
+});
+
+server.get("/author", (req, res) => {
+  const token = req.query.token;
+  const user = users.find(u => u.token === token);
+  
+  if (!user) {
+    return res.status(401).json({ success: false, data: { message: "Access denied." } });
+  }
+
+  const randomAuthor = authors[Math.floor(Math.random() * authors.length)];
+  
+  res.json({ success: true, data: randomAuthor });
+});
+
+server.get("/quote", (req, res) => {
+  const { token, authorId } = req.query;
+
+  const user = users.find(u => u.token === token);
+  if (!user) {
+    return res.status(401).json({ success: false, data: { message: "Access denied." } });
+  }
+
+  const author = authors.find(a => a.authorId === Number(authorId));
+  if (!author) {
+    return res.status(404).json({ success: false, data: { message: "Author not found." } });
+  }
+
+  const authorQuotes = quotes.filter(q => q.authorId === Number(authorId));
+  if (authorQuotes.length === 0) {
+    return res.status(404).json({ success: false, data: { message: "No quotes found for this author." } });
+  }
+
+  const randomQuote = authorQuotes[Math.floor(Math.random() * authorQuotes.length)];
+
+  res.json({ success: true, data: randomQuote });
 });
 
 server.delete("/logout", (req, res) => {
